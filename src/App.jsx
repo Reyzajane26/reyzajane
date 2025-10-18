@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { ShoppingCart, Car, Home, FileText, Menu, X } from 'lucide-react';
 
 // 1. Import the new, translated page components
-import LandingPage from './assets/pages/LandingPage.jsx';
-import CarListing from './assets/pages/listing.jsx';
-import OrderForm from './assets/pages/user/order.jsx';
+import LandingPage from "./pages/user/LandingPage.jsx";
+import CarListing from "./pages/user/Listing.jsx";
+import OrderForm from "./pages/user/Order.jsx";
 
 const CarDealershipApp = () => {
   const [currentPage, setCurrentPage] = useState('landing');
