@@ -1,35 +1,196 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import { ShoppingCart, Car, Home, FileText, Menu, X } from 'lucide-react';
 
-function App() {
-  const [count, setCount] = useState(0)
+// 1. Import the new, translated page components
+import LandingPage from './assets/pages/landingpage.jsx';
+import CarListing from './assets/pages/listing.jsx';
+import OrderForm from './assets/pages/user/order.jsx';
+
+const CarDealershipApp = () => {
+  const [currentPage, setCurrentPage] = useState('landing');
+  const [cart, setCart] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    address: '',
+    paymentMethod: 'installment'
+  });
+
+  const cars = [
+    {
+      id: 1,
+      name: 'Toyota Vios',
+      price: 950000,
+      image: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=500',
+      specs: 'Automatic, 1.3L Engine',
+      year: 2024
+    },
+    {
+      id: 2,
+      name: 'Honda City',
+      price: 1050000,
+      image: 'https://images.unsplash.com/photo-1583267746897-c0d5b0e5d2c6?w=500',
+      specs: 'Automatic, 1.5L Engine',
+      year: 2024
+    },
+    {
+      id: 3,
+      name: 'Mitsubishi Mirage',
+      price: 750000,
+      image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=500',
+      specs: 'Manual, 1.2L Engine',
+      year: 2024
+    },
+    {
+      id: 4,
+      name: 'Ford Ranger',
+      price: 1450000,
+      image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=500',
+      specs: 'Automatic, 2.0L Turbo',
+      year: 2024
+    },
+    {
+      id: 5,
+      name: 'Suzuki Swift',
+      price: 850000,
+      image: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=500',
+      specs: 'Automatic, 1.2L Engine',
+      year: 2024
+    },
+    {
+      id: 6,
+      name: 'Mazda CX-5',
+      price: 1850000,
+      image: 'https://images.unsplash.com/photo-1581540222194-0def2dda95b8?w=500',
+      specs: 'Automatic, 2.5L Engine',
+      year: 2024
+    }
+  ];
+
+  const addToCart = (car) => {
+    const existing = cart.find(item => item.id === car.id);
+    if (!existing) {
+      setCart([...cart, { ...car, quantity: 1 }]);
+      alert(`${car.name} added to cart!`);
+    } else {
+      alert('Item already in cart!');
+    }
+  };
+
+  const removeFromCart = (carId) => {
+    setCart(cart.filter(item => item.id !== carId));
+  };
+
+  const updateQuantity = (carId, newQty) => {
+    if (newQty < 1) return;
+    setCart(cart.map(item => 
+      item.id === carId ? { ...item, quantity: newQty } : item
+    ));
+  };
+
+  const handleSubmit = () => {
+    if (cart.length === 0) {
+      alert('Cart is empty!');
+      return;
+    }
+    if (!formData.fullName || !formData.email || !formData.phone || !formData.address) {
+      alert('Please fill in all fields!');
+      return;
+    }
+    alert('Order submitted successfully! We will contact you shortly.');
+    setCart([]);
+    setFormData({
+      fullName: '',
+      email: '',
+      phone: '',
+      address: '',
+      paymentMethod: 'installment'
+    });
+    setCurrentPage('landing');
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="flex h-screen bg-slate-100">
+      <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-gray-900 text-white transition-all duration-300 flex flex-col`}>
+        <div className="p-4 flex items-center justify-between border-b border-gray-700">
+          {sidebarOpen && <h1 className="text-xl font-bold">Premium Auto</h1>}
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="hover:bg-gray-800 p-2 rounded">
+            {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
 
-export default App
+        <nav className="flex-1 p-4">
+          <button 
+            onClick={() => setCurrentPage('landing')}
+            className={`w-full flex items-center gap-4 p-3 rounded-lg mb-2 hover:bg-gray-800 transition-colors ${currentPage === 'landing' ? 'bg-orange-500' : ''}`}
+          >
+            <Home size={24} />
+            {sidebarOpen && <span>Home</span>}
+          </button>
+
+          <button 
+            onClick={() => setCurrentPage('listing')}
+            className={`w-full flex items-center gap-4 p-3 rounded-lg mb-2 hover:bg-gray-800 transition-colors ${currentPage === 'listing' ? 'bg-orange-500' : ''}`}
+          >
+            <Car size={24} />
+            {sidebarOpen && <span>Car Listing</span>}
+          </button>
+
+          <button 
+            onClick={() => setCurrentPage('ordering')}
+            className={`w-full flex items-center gap-4 p-3 rounded-lg mb-2 hover:bg-gray-800 transition-colors ${currentPage === 'ordering' ? 'bg-orange-500' : ''}`}
+          >
+            <FileText size={24} />
+            {sidebarOpen && <span>Order Form</span>}
+            {cart.length > 0 && (
+              <span className="ml-auto bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
+                {cart.length}
+              </span>
+            )}
+          </button>
+        </nav>
+
+        {sidebarOpen && (
+          <div className="p-4 border-t border-gray-700">
+            <div className="bg-gray-800 p-3 rounded-lg">
+              <p className="text-sm text-gray-400">Cart Items</p>
+              <p className="text-2xl font-bold">{cart.length}</p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="flex-1 overflow-auto">
+        <div className="bg-white shadow-md p-4 flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-gray-800">
+            {currentPage === 'landing' && 'Welcome'}
+            {currentPage === 'listing' && 'Car Listing'}
+            {currentPage === 'ordering' && 'Order Form'}
+          </h2>
+          
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setCurrentPage('ordering')}
+              className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <ShoppingCart size={28} />
+              {cart.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
+                  {cart.length}
+                </span>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {currentPage === 'landing' && <LandingPage onNavigate={setCurrentPage} />}
+        {currentPage === 'listing' && <CarListing cars={cars} onAddToCart={addToCart} />}
+        {currentPage === 'ordering' && <OrderForm cart={cart} formData={formData} setFormData={setFormData} onRemove={removeFromCart} onUpdateQuantity={updateQuantity} onSubmit={handleSubmit} />}
+      </div>
+    </div>
+  );
+};
+
+export default CarDealershipApp;
