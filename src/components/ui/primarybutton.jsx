@@ -12,5 +12,4 @@ const PrimaryButton = ({ children, onClick, className = '', disabled = false }) 
   );
 };
 
-// ✅ ESSENTIAL: This makes the component importable
 export default PrimaryButton;
