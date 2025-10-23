@@ -10,6 +10,7 @@ const Navbar = ({ cartCount, onCartClick }) => {
       </div>
       <button 
         onClick={onCartClick}
+        aria-label={`View shopping cart with ${cartCount} items`}
         className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
       >
         <ShoppingCart size={28} className="text-gray-700" />

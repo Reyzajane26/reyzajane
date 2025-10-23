@@ -8,7 +8,7 @@ const LandingPage = ({ onNavigate }) => {
       <div className="container mx-auto px-4 py-20">
         <div className="text-center text-white mb-20">
           <h1 className="text-7xl font-bold mb-6 animate-fade-in">
-            Premium Auto Dealership
+           Paulino car Dealership
           </h1>
           <p className="text-3xl mb-4 text-blue-200">Your Dream Car Awaits</p>
           <p className="text-xl mb-10 text-blue-300">
